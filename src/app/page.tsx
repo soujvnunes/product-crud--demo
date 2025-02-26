@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 interface HomeProps {
-  searchParams: NextSearchParams<'page'>
+  searchParams: NextSearchParams<typeof searchParams.page>
 }
 
-export default async function Home({ searchParams }: HomeProps) {
-  const page = Number((await searchParams).page)
+export default async function Home(props: HomeProps) {
+  const page = Number((await props.searchParams)[searchParams.page])
 
   // If there's any search parameter (page === NaN | 0), redirects to the page with default search param (1)
   if (!page) redirect(`/?page=1`)
@@ -31,7 +31,7 @@ export default async function Home({ searchParams }: HomeProps) {
         className={!hasPrevious ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
-          query: { page: page - 1 },
+          query: { [searchParams.page]: page - 1 },
         }}>
         Previous
       </Link>
@@ -40,10 +40,15 @@ export default async function Home({ searchParams }: HomeProps) {
         className={!products.hasNext ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
-          query: { page: page + 1 },
+          query: { [searchParams.page]: page + 1 },
         }}>
         Next
       </Link>
     </div>
   )
 }
+
+// Dictionary for the search params
+const searchParams = {
+  page: 'page',
+} as const
