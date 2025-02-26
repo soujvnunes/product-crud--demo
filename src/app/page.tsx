@@ -1,14 +1,15 @@
 import { getProducts } from '@/actions/getProducts'
+import { productsPage } from '@/consts/dict'
 import { type NextSearchParams } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-interface HomeProps {
-  searchParams: NextSearchParams<typeof searchParams.page>
+interface ProductsPageProps {
+  searchParams: NextSearchParams<typeof productsPage.searchParams.page>
 }
 
-export default async function Home(props: HomeProps) {
-  const page = Number((await props.searchParams)[searchParams.page])
+export default async function Products({ searchParams }: ProductsPageProps) {
+  const page = Number((await searchParams)[productsPage.searchParams.page])
 
   // If there's any search parameter (page === NaN | 0), redirects to the page with default search param (1)
   if (!page) redirect(`/?page=1`)
@@ -31,7 +32,7 @@ export default async function Home(props: HomeProps) {
         className={!hasPrevious ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
-          query: { [searchParams.page]: page - 1 },
+          query: { [productsPage.searchParams.page]: page - 1 },
         }}>
         Previous
       </Link>
@@ -40,15 +41,10 @@ export default async function Home(props: HomeProps) {
         className={!products.hasNext ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
-          query: { [searchParams.page]: page + 1 },
+          query: { [productsPage.searchParams.page]: page + 1 },
         }}>
         Next
       </Link>
     </div>
   )
 }
-
-// Dictionary for the search params
-const searchParams = {
-  page: 'page',
-} as const
