@@ -1,6 +1,7 @@
 export const productsPage = {
   searchParams: {
     page: 'page',
+    category: 'category',
   },
 } as const
 

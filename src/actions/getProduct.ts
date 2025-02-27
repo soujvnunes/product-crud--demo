@@ -1,10 +1,11 @@
 export interface Product {
   id: number
   title: string
-  price: string
-  category: string
+  price: number
   description: string
+  category: string
   image: string
+  rating: Record<'rate' | 'count', number>
 }
 
 export async function getProduct(id: number) {
