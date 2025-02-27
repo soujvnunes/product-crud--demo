@@ -5,11 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/Select'
-import getAllCategories from '@/helpers/getAllCategories'
 
 export default async function ProductsCategorySelect() {
   const categories = await getProductCategories()
-  const allCategories = getAllCategories(categories)
 
   return (
     <>
@@ -17,7 +15,7 @@ export default async function ProductsCategorySelect() {
         <SelectValue placeholder="Categories" />
       </SelectTrigger>
       <SelectContent>
-        {allCategories.map((category) => (
+        {categories.map((category) => (
           <SelectItem
             key={category}
             value={category}>
