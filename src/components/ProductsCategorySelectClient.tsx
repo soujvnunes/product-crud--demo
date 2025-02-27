@@ -2,6 +2,8 @@
 
 import { productsPage } from '@/consts/dict'
 import { Select } from './ui/Select'
+import Button from './ui/Button'
+import { XIcon } from 'lucide-react'
 import useEnhancedSearchParams from '@/hooks/useEnhancedSearchParams'
 
 interface ProductsCategorySelectClientProps {
@@ -19,11 +21,21 @@ export default function ProductsCategorySelectClient({
   )
 
   return (
-    <Select
-      value={category || ''}
-      onValueChange={searchParams.change}
-      {...props}>
-      {children}
-    </Select>
+    <div className="inline-flex items-center space-x-2 h-12 pl-1.5 px-2 rounded-xl bg-white">
+      <Select
+        value={category || ''}
+        onValueChange={searchParams.change}
+        {...props}>
+        {children}
+        <Button
+          size="icon"
+          variant="outline"
+          aria-label="Reset category filter"
+          disabled={!searchParams.get()}
+          onClick={searchParams.delete}>
+          <XIcon />
+        </Button>
+      </Select>
+    </div>
   )
 }
