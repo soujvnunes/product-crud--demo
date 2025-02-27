@@ -15,7 +15,6 @@ export default async function Products({ searchParams }: ProductsPageProps) {
   if (!page) redirect(`/?page=1`)
 
   const products = await getProducts(page)
-  const hasPrevious = page - 1 > 0
 
   return (
     <div className="min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -28,8 +27,8 @@ export default async function Products({ searchParams }: ProductsPageProps) {
         ))}
       </ul>
       <Link
-        aria-disabled={!hasPrevious || undefined}
-        className={!hasPrevious ? 'pointer-events-none' : ''}
+        aria-disabled={products.previous.disabled}
+        className={products.previous.disabled ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
           query: { [productsPage.searchParams.page]: page - 1 },
@@ -37,8 +36,8 @@ export default async function Products({ searchParams }: ProductsPageProps) {
         Previous
       </Link>
       <Link
-        aria-disabled={!products.hasNext || undefined}
-        className={!products.hasNext ? 'pointer-events-none' : ''}
+        aria-disabled={products.next.disabled}
+        className={products.next.disabled ? 'pointer-events-none' : ''}
         href={{
           pathname: '/',
           query: { [productsPage.searchParams.page]: page + 1 },
