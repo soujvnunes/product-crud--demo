@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from './ui/Select'
 
-export default async function ProductsCategorySelect() {
+export default async function ProductsFiltersCategory() {
   const categories = await getProductCategories()
 
   return (
