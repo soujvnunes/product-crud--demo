@@ -2,6 +2,7 @@ export const productsPage = {
   searchParams: {
     page: 'page',
     category: 'category',
+    price: 'price',
   },
 } as const
 
