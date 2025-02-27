@@ -3,22 +3,29 @@ import { productsPage } from '@/consts/dict'
 import Image from 'next/image'
 import Link from 'next/link'
 import LinkButton from './ui/LinkButton'
+import sortProducts from '@/helpers/sortProducts'
 
 interface ProductsListProps {
   page: number
   category?: string
+  price?: string
 }
 
 export default async function ProductsList({
   page,
   category,
+  price,
 }: ProductsListProps) {
   const products = await getProducts({ page, category })
+  const sortedProducts = sortProducts({
+    products: products.data,
+    byPrice: price,
+  })
 
   return (
     <>
       <ul className="grid grid-cols-3 gap-4 justify-items-center">
-        {products.data.map((product) => (
+        {sortedProducts.map((product) => (
           <li
             className="w-full"
             key={product.id}>
