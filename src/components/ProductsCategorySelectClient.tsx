@@ -24,9 +24,16 @@ export default function ProductsCategorySelectClient({
   const handleValueChange = useCallback(
     (value: AllProductCategory) => {
       const params = new URLSearchParams(searchParams.toString())
+      const currentCategory = params.get(productsPage.searchParams.category)
+      const isAllCategory = value === ALL_CATEGORY
+
+      // I don't want to trigger a rerender on the search params
+      // if user clicks on 'all' without any category listed.
+      if (!currentCategory && isAllCategory) return
+
       let newParams = ''
 
-      if (value === ALL_CATEGORY) {
+      if (isAllCategory) {
         params.delete(productsPage.searchParams.category)
         newParams = ''
       } else {
