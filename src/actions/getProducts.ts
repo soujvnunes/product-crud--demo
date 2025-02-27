@@ -32,7 +32,20 @@ export async function getProducts(currentPage: number) {
       // This helps me keeping track of more data.
       // Example for page 1: [13].slice(1, 12), meaning that there're
       // more data to be fetched as I'm rendering just 12 of 13 items.
-      hasNext: products.length > limit,
+      next: {
+        // Also, since this is being used mainly for a11y purposes,
+        // I prefer to not render false value as it's unnecessary for
+        // screen readers. Example: It's better to have disabled="true"
+        // and not disabled="false" otherwise, just any disabled
+        // attribute at all.
+        disabled: products.length <= limit || undefined,
+      },
+      previous: {
+        // If I subtracted the current page by 1 and it's zero or less,
+        // users will not be able to fetch any data since they're on
+        // the very first page.
+        disabled: currentPage - 1 <= 0 || undefined,
+      },
     }
   } catch (error) {
     throw error
