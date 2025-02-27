@@ -1,21 +1,34 @@
 import { type Product } from './getProduct'
 
-export async function getProducts(currentPage: number) {
+interface GetProductsArgs {
+  page: number
+  category?: string
+}
+
+export async function getProducts({ page, category }: GetProductsArgs) {
+  const { API_BASE_URL, API_PRODUCTS_PATH } = process.env
   // I'm fetching 12 per time instead of all of the available data.
   const limitBase = 12
   // I'm adding plus one to check if there're more data available.
   const offset = 1
   // The actual limit will be increased according to the current page.
-  const limit = limitBase * currentPage
+  const limit = limitBase * page
+  const categoryPath = category ? `/category/${category}` : ''
+
+  if (!API_BASE_URL || !API_PRODUCTS_PATH) {
+    throw new Error('Missing API variables')
+  }
 
   try {
     const response = await fetch(
-      `${process.env.API_BASE_URL}${process.env.API_PRODUCTS_PATH}?limit=${
+      `${API_BASE_URL}${API_PRODUCTS_PATH}${categoryPath}?limit=${
         limit + offset
       }`,
     )
 
-    if (!response.ok) throw new Error('Error getting products')
+    if (!response.ok) {
+      throw new Error('Error getting products')
+    }
 
     const products: Product[] = await response.json()
     // Since I've fetched data with the limit value base plus one,
@@ -26,7 +39,7 @@ export async function getProducts(currentPage: number) {
       // The available data will be sliced by the range between
       // current page and available data length.
       data: products.slice(
-        (currentPage - 1) * limitBase,
+        (page - 1) * limitBase,
         productsLength < limit ? limit : productsLength,
       ),
       // This helps me keeping track of more data.
@@ -44,7 +57,7 @@ export async function getProducts(currentPage: number) {
         // If I subtracted the current page by 1 and it's zero or less,
         // users will not be able to fetch any data since they're on
         // the very first page.
-        disabled: currentPage - 1 <= 0 || undefined,
+        disabled: page - 1 <= 0 || undefined,
       },
     }
   } catch (error) {
