@@ -1,4 +1,6 @@
 import { productsPage } from '@/consts/dict'
+import ProductsCategorySelect from '@/components/ProductsCategorySelect'
+import ProductsCategorySelectClient from '@/components/ProductsCategorySelectClient'
 import ProductsList from '@/components/ProductsList'
 import { type NextParams } from 'next'
 import { redirect } from 'next/navigation'
@@ -20,6 +22,14 @@ export default async function Products({ searchParams }: ProductsPageProps) {
 
   return (
     <main className="max-w-5xl px-8 space-y-4 mx-auto">
+      <header className="flex h-16 items-center justify-between">
+        <h2 className="text-2xl font-semibold text-neutral-950/60">Products</h2>
+        <Suspense fallback="Loading products category selector">
+          <ProductsCategorySelectClient category={queries.category}>
+            <ProductsCategorySelect />
+          </ProductsCategorySelectClient>
+        </Suspense>
+      </header>
       <Suspense fallback="Loading products">
         <ProductsList
           page={page}
