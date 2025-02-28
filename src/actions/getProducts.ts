@@ -1,3 +1,5 @@
+'use server'
+
 import { type Product } from './getProduct'
 
 interface GetProductsArgs {
