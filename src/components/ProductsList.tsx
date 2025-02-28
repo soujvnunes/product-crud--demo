@@ -1,9 +1,11 @@
 import { getProducts } from '@/actions/getProducts'
 import { productsPage } from '@/consts/dict'
-import Image from 'next/image'
-import Link from 'next/link'
 import LinkButton from './ui/LinkButton'
+import { StarIcon } from 'lucide-react'
 import sortProducts from '@/helpers/sortProducts'
+import filterProductsByRate from '@/helpers/filterProductsByRate'
+import { redirect } from 'next/navigation'
+import ProductCard from './ProductCard'
 
 interface ProductsListProps {
   page: number
@@ -21,65 +23,87 @@ export default async function ProductsList({
     products: products.data,
     byPrice: price,
   })
+  const filteredProducts = filterProductsByRate(sortedProducts)
+
+  // If there's no data available for this page, it probably went to the previous one
+  if (!filteredProducts.data.length) {
+    const params = new URLSearchParams()
+
+    if (category) params.set('category', category)
+    if (price) params.set('price', price)
+
+    const queryString = params.toString()
+
+    redirect(`/?page=${page - 1}${queryString ? `&${queryString}` : ''}`)
+  }
 
   return (
     <>
-      <ul className="grid grid-cols-3 gap-4 justify-items-center">
-        {sortedProducts.map((product) => (
+      <section
+        className="bg-yellow-500/60 py-2 rounded-xl"
+        hidden={!filteredProducts.favorites.length}>
+        <h3 className="text-xl mx-3 gap-2 mb-2 font-semibold flex items-center">
+          <StarIcon className="size-6" />
+          Favorites
+        </h3>
+        <ul className="flex flex-nowrap px-4 overflow-x-auto gap-4">
+          {filteredProducts.favorites.map((product) => (
+            <li
+              className="w-5/6 md:w-2/5 flex-none"
+              key={product.id}>
+              <ProductCard
+                {...product}
+                src={product.image}
+                sizes="(min-width: 808px) 50vw, 100vw"
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+      <p
+        aria-live="polite"
+        className="font-semibold">
+        {!filteredProducts.data.length && 'No items available on this page.'}
+      </p>
+      <ul
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 justify-items-center"
+        hidden={!filteredProducts.data.length}>
+        {filteredProducts.data.map((product) => (
           <li
             className="w-full"
             key={product.id}>
-            <div className="relative h-64">
-              <Image
-                fill
-                alt=""
-                priority
-                className="object-contain"
-                sizes="(min-width: 808px) 50vw, 100vw"
-                src={product.image}
-              />
-            </div>
-            <div>
-              <p className="font-semibold truncate">{product.title}</p>
-              <p className="text-sm">
-                <strong>{product.category}</strong>
-              </p>
-            </div>
-            <Link
-              href={{
-                pathname: `/product/${product.id}`,
-                query: {
-                  [productsPage.searchParams.page]: page,
-                  category,
-                },
-              }}>
-              Buy
-            </Link>
+            <ProductCard
+              {...product}
+              src={product.image}
+              sizes="(min-width: 808px) 50vw, 100vw"
+            />
           </li>
         ))}
       </ul>
-      <LinkButton
-        disabled={products.previous.disabled}
-        href={{
-          pathname: '/',
-          query: {
-            [productsPage.searchParams.page]: page - 1,
-            category,
-          },
-        }}>
-        Previous
-      </LinkButton>
-      <LinkButton
-        disabled={products.next.disabled}
-        href={{
-          pathname: '/',
-          query: {
-            [productsPage.searchParams.page]: page + 1,
-            category,
-          },
-        }}>
-        Next
-      </LinkButton>
+      <footer className="w-full flex justify-end gap-2 pb-2">
+        <LinkButton
+          disabled={products.previous.disabled}
+          href={{
+            pathname: '/',
+            query: {
+              [productsPage.searchParams.page]: page - 1,
+              category,
+            },
+          }}>
+          Previous
+        </LinkButton>
+        <LinkButton
+          disabled={products.next.disabled}
+          href={{
+            pathname: '/',
+            query: {
+              [productsPage.searchParams.page]: page + 1,
+              category,
+            },
+          }}>
+          Next
+        </LinkButton>
+      </footer>
     </>
   )
 }
