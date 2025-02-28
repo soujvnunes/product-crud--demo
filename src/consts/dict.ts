@@ -1,4 +1,5 @@
 export const productsPage = {
+  pathname: '/',
   searchParams: {
     page: 'page',
     category: 'category',
@@ -7,6 +8,7 @@ export const productsPage = {
 } as const
 
 export const productPage = {
+  pathname: '/product',
   params: {
     id: 'id',
   },
