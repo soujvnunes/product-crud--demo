@@ -84,7 +84,7 @@ export default function ProductRemove({ href, ...props }: ProductRemoveProps) {
             Are you sure you want to remove it?
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="grid grid-cols-2">
+        <DialogFooter className="grid grid-cols-2 gap-2">
           <DialogClose asChild>
             <Button type="button">No</Button>
           </DialogClose>

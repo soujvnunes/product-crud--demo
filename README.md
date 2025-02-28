@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Product C.R.U.D
+
+Create, read, update and remove products from a configured store
+
+> Check out the printscreens on the `/public` folder.
 
 ## Getting Started
 
-First, run the development server:
+### Setup local development environment
+
+1. Install pnpm
+
+If you don’t already have pnpm installed, you can install it globally via npm:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install -g pnpm
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Verify the installation:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm --version
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Clone the Repository
 
-## Learn More
+```bash
+git clone git@github.com:soujvnunes/product-crud--demo.git
+cd product-crud--demo
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Install Dependencies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In the root of the repository, install the dependencies with pnpm:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm install
+```
 
-## Deploy on Vercel
+4. Start the application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Check the scripts section in the repository’s `package.json` file:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+### Environment variables
+
+Create a `.env` file with the following content:
+
+```
+API_BASE_URL=https://fakestoreapi.com
+API_PRODUCTS_PATH=/products
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
