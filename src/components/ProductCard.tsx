@@ -3,14 +3,14 @@ import ProductImage, { type ProductImageProps } from './ProductImage'
 import LinkButton from './ui/LinkButton'
 import { StarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { productsPage } from '@/consts/dict'
+import { productPage } from '@/consts/dict'
+import { type ParsedUrlQueryInput } from 'querystring'
 
 interface ProductProps
-  extends Omit<Product, 'category'>,
+  extends Omit<Product, 'category' | 'image'>,
     Omit<ProductImageProps, 'id' | 'title'> {
   compact?: boolean
-  category?: string
-  page?: string
+  query: ParsedUrlQueryInput
 }
 
 export default function ProductCard({
@@ -19,8 +19,7 @@ export default function ProductCard({
   rating,
   id,
   compact,
-  page,
-  category,
+  query,
   ...props
 }: ProductProps) {
   return (
@@ -51,11 +50,8 @@ export default function ProductCard({
             size="sm"
             className="shrink-0 ml-auto"
             href={{
-              pathname: `/product/${id}`,
-              query: {
-                [productsPage.searchParams.page]: page,
-                category,
-              },
+              pathname: `${productPage.pathname}/${id}`,
+              query,
             }}>
             Manage
           </LinkButton>
