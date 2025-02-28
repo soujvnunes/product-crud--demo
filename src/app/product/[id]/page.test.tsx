@@ -3,7 +3,7 @@ import { getProduct } from '@/actions/getProduct'
 import { getProducts } from '@/actions/getProducts'
 import { productPage } from '@/consts/dict'
 import '@testing-library/jest-dom'
-import ProductPage, { ProductPageProps } from './page'
+import ProductPage from './page'
 
 jest.mock('@/actions/getProduct', () => ({
   getProduct: jest.fn(),
