@@ -6,6 +6,7 @@ import sortProducts from '@/helpers/sortProducts'
 import filterProductsByRate from '@/helpers/filterProductsByRate'
 import { redirect } from 'next/navigation'
 import ProductCard from './ProductCard'
+import { type Product } from '@/actions/getProduct'
 
 interface ProductsListProps {
   page: number
@@ -37,6 +38,22 @@ export default async function ProductsList({
     redirect(`/?page=${page - 1}${queryString ? `&${queryString}` : ''}`)
   }
 
+  const query = {
+    price,
+    category,
+  }
+
+  function productCardProps({ image, ...product }: Product) {
+    return {
+      ...product,
+      src: image,
+      query: {
+        [productsPage.searchParams.page]: page,
+        ...query,
+      },
+    }
+  }
+
   return (
     <>
       <section
@@ -52,9 +69,8 @@ export default async function ProductsList({
               className="w-5/6 md:w-2/5 flex-none"
               key={product.id}>
               <ProductCard
-                {...product}
-                src={product.image}
                 sizes="(min-width: 808px) 50vw, 100vw"
+                {...productCardProps(product)}
               />
             </li>
           ))}
@@ -73,9 +89,8 @@ export default async function ProductsList({
             className="w-full"
             key={product.id}>
             <ProductCard
-              {...product}
-              src={product.image}
               sizes="(min-width: 808px) 50vw, 100vw"
+              {...productCardProps(product)}
             />
           </li>
         ))}
@@ -84,10 +99,10 @@ export default async function ProductsList({
         <LinkButton
           disabled={products.previous.disabled}
           href={{
-            pathname: '/',
+            pathname: productsPage.pathname,
             query: {
               [productsPage.searchParams.page]: page - 1,
-              category,
+              ...query,
             },
           }}>
           Previous
@@ -95,10 +110,10 @@ export default async function ProductsList({
         <LinkButton
           disabled={products.next.disabled}
           href={{
-            pathname: '/',
+            pathname: productsPage.pathname,
             query: {
               [productsPage.searchParams.page]: page + 1,
-              category,
+              ...query,
             },
           }}>
           Next
