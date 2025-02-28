@@ -57,10 +57,6 @@ export default async function ProductPage({
           src={product.image}
         />
         <div className="space-y-4">
-          <p>
-            <strong className="text-xs block uppercase mb-2">Title</strong>
-            {product.title}
-          </p>
           <p className="space-y-2">
             <strong className="text-xs block uppercase mb-2">
               Description
