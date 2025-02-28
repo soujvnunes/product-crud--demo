@@ -3,12 +3,9 @@ import Link, { type LinkProps } from 'next/link'
 import { buttonVariants } from './Button'
 import { cn } from '@/lib/utils'
 
-interface LinkButtonProps
-  extends LinkProps,
-    Omit<React.ComponentPropsWithRef<'a'>, keyof LinkProps>,
-    VariantProps<typeof buttonVariants> {
-  className?: string
-}
+type LinkButtonProps = LinkProps &
+  Omit<React.ComponentProps<'a'>, keyof LinkProps> &
+  VariantProps<typeof buttonVariants>
 
 export default function LinkButton({
   disabled,
